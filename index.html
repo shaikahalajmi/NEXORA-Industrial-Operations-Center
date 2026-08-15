@@ -295,181 +295,736 @@ button,select{
     inset:70px 20px 20px;
 }
 
-/* FACTORY SHAPES */
+/* =========================
+   ADVANCED ISOMETRIC FACTORY
+========================= */
 
-.factory-line{
+.iso-floor{
     position:absolute;
-    background:linear-gradient(145deg,#172a24,#0b1713);
-    border:1px solid rgba(180,255,199,.08);
-    height:55px;
-    border-radius:8px;
+    width:78%;
+    height:68%;
+    left:50%;
+    top:48%;
+    transform:
+        translate(-50%,-50%)
+        rotateX(58deg)
+        rotateZ(-29deg);
+
+    background:
+        linear-gradient(rgba(121,255,164,.07) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(121,255,164,.07) 1px,transparent 1px),
+        linear-gradient(145deg,#101f1a,#07100d);
+
+    background-size:34px 34px;
+
+    border:1px solid rgba(146,255,185,.16);
+
+    box-shadow:
+        0 55px 80px rgba(0,0,0,.58),
+        inset 0 0 70px rgba(63,170,104,.04);
+}
+
+
+/* CONVEYOR LINES */
+
+.conveyor{
+    position:absolute;
+    height:46px;
+    z-index:2;
     transform:skewY(-13deg);
-    box-shadow:0 22px 30px rgba(0,0,0,.35);
+    border-radius:8px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #223b33,
+            #101f1a
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        11px 15px 0 rgba(0,0,0,.23),
+        0 24px 30px rgba(0,0,0,.27);
 }
 
-.line1{
-    width:270px;
-    left:11%;
-    top:20%;
+.conveyor:before,
+.conveyor:after{
+    content:"";
+    position:absolute;
+    top:7px;
+    bottom:7px;
+    width:4px;
+    background:#314d42;
 }
 
-.line2{
+.conveyor:before{
+    left:12px;
+}
+
+.conveyor:after{
+    right:12px;
+}
+
+.belt{
+    position:absolute;
+    inset:10px 20px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(178,255,203,.09) 0,
+            rgba(178,255,203,.09) 12px,
+            transparent 12px,
+            transparent 22px
+        );
+
+    border-top:1px solid rgba(173,255,204,.08);
+    border-bottom:1px solid rgba(173,255,204,.08);
+}
+
+
+.conveyor-1{
+    width:260px;
+    left:9%;
+    top:22%;
+}
+
+.conveyor-2{
+    width:285px;
+    right:8%;
+    top:28%;
+}
+
+.conveyor-3{
+    width:320px;
+    left:13%;
+    top:57%;
+}
+
+.conveyor-4{
     width:310px;
-    right:11%;
-    top:30%;
+    right:8%;
+    top:67%;
 }
 
-.line3{
-    width:300px;
-    left:15%;
+
+/* MACHINE CELLS */
+
+.cell{
+    position:absolute;
+    width:120px;
+    height:80px;
+
+    z-index:3;
+
+    border-radius:8px;
+
+    transform:
+        skewY(-13deg);
+
+    background:
+        linear-gradient(
+            145deg,
+            #2a463b,
+            #11211b
+        );
+
+    border:
+        1px solid
+        rgba(192,255,211,.10);
+
+    box-shadow:
+        14px 16px 0 rgba(2,7,5,.42),
+        0 20px 30px rgba(0,0,0,.34);
+}
+
+
+.cell:before{
+    content:"";
+
+    position:absolute;
+
+    inset:10px;
+
+    border:
+        1px solid
+        rgba(145,255,179,.06);
+
+    border-radius:5px;
+}
+
+
+.cell-1{
+    left:17%;
+    top:29%;
+}
+
+.cell-2{
+    left:39%;
+    top:18%;
+}
+
+.cell-3{
+    right:18%;
+    top:26%;
+}
+
+.cell-4{
+    left:26%;
+    top:59%;
+}
+
+.cell-5{
+    right:31%;
     top:54%;
 }
 
-.line4{
-    width:330px;
-    right:8%;
-    top:65%;
+.cell-6{
+    right:12%;
+    top:70%;
 }
 
-.factory-box{
+
+/* CONNECTION PATHS */
+
+.connection{
     position:absolute;
-    width:115px;
-    height:84px;
-    border-radius:7px;
+
+    height:2px;
+
     background:
-        linear-gradient(135deg,#294139,#0e1b17);
-    border:1px solid rgba(255,255,255,.08);
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(101,255,150,.32),
+            transparent
+        );
+
+    z-index:1;
+
+    transform-origin:left center;
+
     box-shadow:
-        14px 16px 0 rgba(2,8,6,.55),
-        0 22px 35px rgba(0,0,0,.4);
-    transform:skewY(-13deg);
+        0 0 8px
+        rgba(100,255,150,.15);
 }
 
-.box1{left:15%;top:25%;}
-.box2{left:38%;top:15%;}
-.box3{right:20%;top:23%;}
-.box4{left:25%;top:57%;}
-.box5{right:31%;top:54%;}
+.c1{
+    width:185px;
+    left:23%;
+    top:36%;
+    transform:rotate(-13deg);
+}
 
-/* MACHINE NODES */
+.c2{
+    width:210px;
+    left:44%;
+    top:31%;
+    transform:rotate(10deg);
+}
+
+.c3{
+    width:225px;
+    left:28%;
+    top:59%;
+    transform:rotate(11deg);
+}
+
+.c4{
+    width:190px;
+    left:52%;
+    top:55%;
+    transform:rotate(-9deg);
+}
+
+.c5{
+    width:220px;
+    left:39%;
+    top:72%;
+    transform:rotate(7deg);
+}
+
+
+/* ROBOT MACHINE */
 
 .machine{
     position:absolute;
-    width:82px;
-    height:118px;
+
+    width:96px;
+    height:130px;
+
     z-index:7;
+
     cursor:pointer;
-    transition:.25s ease;
+
+    transition:
+        transform .25s ease,
+        filter .25s ease;
 }
+
 
 .machine:hover{
-    transform:translateY(-8px) scale(1.04);
+    transform:
+        translateY(-8px)
+        scale(1.045);
+
+    filter:
+        brightness(1.12);
 }
 
-.machine-base{
+
+.robot{
     position:absolute;
-    bottom:0;
+
     left:50%;
-    transform:translateX(-50%) rotateX(60deg);
-    width:78px;
-    height:42px;
+    bottom:0;
+
+    width:85px;
+    height:115px;
+
+    transform:
+        translateX(-50%);
+}
+
+
+/* BASE */
+
+.robot-base{
+    position:absolute;
+
+    left:50%;
+    bottom:0;
+
+    width:82px;
+    height:35px;
+
+    transform:
+        translateX(-50%)
+        rotateX(62deg);
+
     border-radius:50%;
-    background:rgba(79,255,117,.15);
-    border:1px solid rgba(125,255,118,.7);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(127,255,149,.22),
+            rgba(30,94,53,.10)
+        );
+
+    border:
+        1px solid
+        rgba(125,255,118,.75);
+
     box-shadow:
-        0 0 28px rgba(125,255,118,.2),
-        inset 0 0 16px rgba(125,255,118,.16);
+        0 0 26px
+        rgba(125,255,118,.25),
+        inset 0 0 18px
+        rgba(125,255,118,.11);
 }
 
-.machine-arm{
+
+/* COLUMN */
+
+.robot-column{
     position:absolute;
-    width:12px;
-    height:69px;
-    background:linear-gradient(#d8fff0,#72b698);
-    border-radius:10px;
-    left:34px;
-    bottom:24px;
-    box-shadow:0 0 12px rgba(146,255,196,.23);
-    transform:rotate(5deg);
-    transform-origin:bottom;
+
+    bottom:21px;
+    left:39px;
+
+    width:13px;
+    height:55px;
+
+    border-radius:9px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #7eb79d,
+            #e8fff5,
+            #6fa78d
+        );
+
+    box-shadow:
+        0 0 12px
+        rgba(182,255,219,.18);
 }
 
-.machine-arm:before{
-    content:"";
-    position:absolute;
-    width:45px;
-    height:12px;
-    left:2px;
-    top:3px;
-    border-radius:10px;
-    background:linear-gradient(90deg,#95d7b7,#d7fff0);
-    transform:rotate(-33deg);
-    transform-origin:left;
-}
 
-.machine-arm:after{
-    content:"";
+/* JOINTS */
+
+.robot-joint{
     position:absolute;
-    width:17px;
-    height:17px;
+
+    width:18px;
+    height:18px;
+
     border-radius:50%;
-    background:#e5fff5;
-    border:3px solid #75c59f;
-    left:-3px;
-    top:-2px;
+
+    background:
+        radial-gradient(
+            circle at 35% 35%,
+            #ffffff,
+            #b9f5d7 45%,
+            #639b7e 75%
+        );
+
+    border:
+        2px solid
+        #81c3a4;
+
+    box-shadow:
+        0 0 12px
+        rgba(188,255,222,.22);
 }
+
+
+.joint-a{
+    left:36px;
+    bottom:67px;
+}
+
+.joint-b{
+    left:53px;
+    bottom:88px;
+}
+
+
+/* ARM SEGMENTS */
+
+.robot-segment{
+    position:absolute;
+
+    height:11px;
+
+    border-radius:8px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f2fff9,
+            #9bd1b6
+        );
+
+    box-shadow:
+        0 0 9px
+        rgba(180,255,218,.15);
+}
+
+
+.segment-a{
+    width:36px;
+
+    left:41px;
+    bottom:78px;
+
+    transform:
+        rotate(-37deg);
+
+    transform-origin:
+        left center;
+}
+
+
+.segment-b{
+    width:31px;
+
+    left:59px;
+    bottom:95px;
+
+    transform:
+        rotate(23deg);
+
+    transform-origin:
+        left center;
+}
+
+
+/* TOOL */
+
+.robot-tool{
+    position:absolute;
+
+    width:12px;
+    height:21px;
+
+    right:-2px;
+    bottom:94px;
+
+    background:
+        linear-gradient(
+            #dffff0,
+            #87baa0
+        );
+
+    border-radius:
+        4px 4px 6px 6px;
+
+    transform:
+        rotate(23deg);
+}
+
+
+/* MACHINE LABEL */
 
 .machine-tag{
     position:absolute;
-    left:48px;
-    top:-6px;
+
+    left:58px;
+    top:-5px;
+
     white-space:nowrap;
-    padding:5px 8px;
+
+    padding:
+        5px 8px;
+
     border-radius:6px;
+
     font-size:9px;
+
     color:#dcebe4;
-    background:#12221d;
-    border:1px solid rgba(124,255,118,.2);
+
+    background:
+        rgba(16,33,27,.96);
+
+    border:
+        1px solid
+        rgba(124,255,118,.24);
+
+    box-shadow:
+        0 7px 15px
+        rgba(0,0,0,.25);
+
+    z-index:12;
 }
+
 
 .machine-tag b{
     color:var(--green);
     margin-left:5px;
 }
 
-.machine.warning .machine-base{
-    border-color:var(--orange);
-    background:rgba(255,173,88,.14);
-    box-shadow:0 0 28px rgba(255,173,88,.18);
+
+/* NORMAL GLOW */
+
+.machine:not(.warning):not(.critical)
+.robot-base{
+
+    animation:
+        normalPulse
+        2.6s
+        infinite;
 }
 
-.machine.warning .machine-tag b{
-    color:var(--orange);
+
+@keyframes normalPulse{
+
+    0%,100%{
+        box-shadow:
+            0 0 20px
+            rgba(125,255,118,.17);
+    }
+
+    50%{
+        box-shadow:
+            0 0 35px
+            rgba(125,255,118,.34);
+    }
+
 }
 
-.machine.critical .machine-base{
-    border-color:var(--red);
-    background:rgba(255,101,93,.18);
-    box-shadow:0 0 32px rgba(255,101,93,.28);
+
+/* WARNING */
+
+.machine.warning
+.robot-base{
+
+    border-color:
+        var(--orange);
+
+    background:
+        rgba(255,173,88,.14);
+
+    box-shadow:
+        0 0 28px
+        rgba(255,173,88,.23);
 }
 
-.machine.critical .machine-arm,
-.machine.critical .machine-arm:before{
-    background:linear-gradient(#ff9a80,#ff634f);
+
+.machine.warning
+.machine-tag{
+
+    border-color:
+        rgba(255,173,88,.32);
 }
 
-.machine.critical .machine-tag b{
-    color:var(--red);
+
+.machine.warning
+.machine-tag b{
+
+    color:
+        var(--orange);
 }
 
-.m1{left:14%;top:15%;}
-.m2{left:39%;top:12%;}
-.m3{right:18%;top:19%;}
-.m4{left:23%;top:45%;}
-.m5{left:48%;top:48%;}
-.m6{right:14%;top:48%;}
-.m7{left:35%;top:68%;}
-.m8{right:28%;top:68%;}
+
+/* CRITICAL */
+
+.machine.critical
+.robot-base{
+
+    border-color:
+        var(--red);
+
+    background:
+        rgba(255,101,93,.20);
+
+    animation:
+        criticalPulse
+        1.25s
+        infinite;
+}
+
+
+.machine.critical
+.robot-column,
+
+.machine.critical
+.robot-segment,
+
+.machine.critical
+.robot-tool{
+
+    background:
+        linear-gradient(
+            #ffb19d,
+            #ff654e
+        );
+}
+
+
+.machine.critical
+.robot-joint{
+
+    border-color:
+        #ff7668;
+
+    background:
+        radial-gradient(
+            circle,
+            #ffd4ca,
+            #ff7562
+        );
+}
+
+
+.machine.critical
+.machine-tag{
+
+    border-color:
+        rgba(255,101,93,.45);
+}
+
+
+.machine.critical
+.machine-tag b{
+
+    color:
+        var(--red);
+}
+
+
+@keyframes criticalPulse{
+
+    0%,100%{
+
+        box-shadow:
+            0 0 22px
+            rgba(255,101,93,.28);
+
+    }
+
+    50%{
+
+        box-shadow:
+            0 0 46px
+            rgba(255,101,93,.62);
+
+    }
+
+}
+
+
+/* MACHINE POSITIONS */
+
+.m1{
+    left:13%;
+    top:14%;
+}
+
+.m2{
+    left:38%;
+    top:9%;
+}
+
+.m3{
+    right:16%;
+    top:18%;
+}
+
+.m4{
+    left:21%;
+    top:43%;
+}
+
+.m5{
+    left:47%;
+    top:43%;
+}
+
+.m6{
+    right:12%;
+    top:43%;
+}
+
+.m7{
+    left:34%;
+    top:66%;
+}
+
+.m8{
+    right:26%;
+    top:67%;
+}
+
+
+/* AMBIENT GLOW */
+
+.factory-stage:after{
+
+    content:"";
+
+    position:absolute;
+
+    width:500px;
+    height:280px;
+
+    left:50%;
+    top:47%;
+
+    transform:
+        translate(-50%,-50%);
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(66,194,101,.065),
+            transparent 70%
+        );
+
+    pointer-events:none;
+
+    z-index:0;
+}
 
 /* DEVICE CARD */
 
@@ -814,27 +1369,326 @@ button,select{
         </aside>
 
         <!-- CENTER -->
-        <main class="center">
+       <main class="center">
 
-            <div class="center-header">
+    <div class="center-header">
 
-                <div class="zone-select">
-                    <label>SELECT ZONE</label>
+        <div class="zone-select">
+            <label>SELECT ZONE</label>
 
-                    <select>
-                        <option>Zone A-01</option>
-                        <option>Zone B-02</option>
-                        <option>Zone C-03</option>
-                    </select>
-                </div>
+            <select>
+                <option>Zone A-01</option>
+                <option>Zone B-02</option>
+                <option>Zone C-03</option>
+            </select>
+        </div>
 
-                <div class="live-indicator">
-                    ● LIVE SYSTEM
-                </div>
+        <div class="live-indicator">
+            ● LIVE SYSTEM
+        </div>
 
+    </div>
+
+
+    <div class="factory-stage">
+
+        <!-- FLOOR PLATFORM -->
+
+        <div class="iso-floor"></div>
+
+        <!-- PRODUCTION LINES -->
+
+        <div class="conveyor conveyor-1">
+            <div class="belt"></div>
+        </div>
+
+        <div class="conveyor conveyor-2">
+            <div class="belt"></div>
+        </div>
+
+        <div class="conveyor conveyor-3">
+            <div class="belt"></div>
+        </div>
+
+        <div class="conveyor conveyor-4">
+            <div class="belt"></div>
+        </div>
+
+        <!-- MACHINE CELLS -->
+
+        <div class="cell cell-1"></div>
+        <div class="cell cell-2"></div>
+        <div class="cell cell-3"></div>
+        <div class="cell cell-4"></div>
+        <div class="cell cell-5"></div>
+        <div class="cell cell-6"></div>
+
+        <!-- CONNECTION PATHS -->
+
+        <div class="connection c1"></div>
+        <div class="connection c2"></div>
+        <div class="connection c3"></div>
+        <div class="connection c4"></div>
+        <div class="connection c5"></div>
+
+        <!-- ROBOT M1 -->
+
+        <div class="machine m1"
+             data-machine="R-F3"
+             data-temp="68"
+             data-vibration="2.1"
+             data-utilization="78"
+             data-status="NORMAL">
+
+            <div class="machine-tag">
+                R-F3 <b>78%</b>
             </div>
 
-            <div class="factory-stage">
+            <div class="robot">
+                <div class="robot-base"></div>
+                <div class="robot-column"></div>
+                <div class="robot-joint joint-a"></div>
+                <div class="robot-segment segment-a"></div>
+                <div class="robot-joint joint-b"></div>
+                <div class="robot-segment segment-b"></div>
+                <div class="robot-tool"></div>
+            </div>
+        </div>
+
+        <!-- ROBOT M2 -->
+
+        <div class="machine m2"
+             data-machine="T-9R"
+             data-temp="65"
+             data-vibration="1.7"
+             data-utilization="65"
+             data-status="NORMAL">
+
+            <div class="machine-tag">
+                T-9R <b>65%</b>
+            </div>
+
+            <div class="robot">
+                <div class="robot-base"></div>
+                <div class="robot-column"></div>
+                <div class="robot-joint joint-a"></div>
+                <div class="robot-segment segment-a"></div>
+                <div class="robot-joint joint-b"></div>
+                <div class="robot-segment segment-b"></div>
+                <div class="robot-tool"></div>
+            </div>
+        </div>
+
+        <!-- ROBOT M3 -->
+
+        <div class="machine m3"
+             data-machine="T-8R"
+             data-temp="71"
+             data-vibration="2.9"
+             data-utilization="68"
+             data-status="NORMAL">
+
+            <div class="machine-tag">
+                T-8R <b>68%</b>
+            </div>
+
+            <div class="robot">
+                <div class="robot-base"></div>
+                <div class="robot-column"></div>
+                <div class="robot-joint joint-a"></div>
+                <div class="robot-segment segment-a"></div>
+                <div class="robot-joint joint-b"></div>
+                <div class="robot-segment segment-b"></div>
+                <div class="robot-tool"></div>
+            </div>
+        </div>
+
+        <!-- ROBOT M4 -->
+
+        <div class="machine m4 warning"
+             data-machine="C-T2"
+             data-temp="82"
+             data-vibration="4.5"
+             data-utilization="83"
+             data-status="WARNING">
+
+            <div class="machine-tag">
+                C-T2 <b>83%</b>
+            </div>
+
+            <div class="robot">
+                <div class="robot-base"></div>
+                <div class="robot-column"></div>
+                <div class="robot-joint joint-a"></div>
+                <div class="robot-segment segment-a"></div>
+                <div class="robot-joint joint-b"></div>
+                <div class="robot-segment segment-b"></div>
+                <div class="robot-tool"></div>
+            </div>
+        </div>
+
+        <!-- ROBOT M5 -->
+
+        <div class="machine m5 critical"
+             data-machine="Z-8X"
+             data-temp="92"
+             data-vibration="7.8"
+             data-utilization="14"
+             data-status="CRITICAL">
+
+            <div class="machine-tag">
+                Z-8X <b>14%</b>
+            </div>
+
+            <div class="robot">
+                <div class="robot-base"></div>
+                <div class="robot-column"></div>
+                <div class="robot-joint joint-a"></div>
+                <div class="robot-segment segment-a"></div>
+                <div class="robot-joint joint-b"></div>
+                <div class="robot-segment segment-b"></div>
+                <div class="robot-tool"></div>
+            </div>
+        </div>
+
+        <!-- ROBOT M6 -->
+
+        <div class="machine m6"
+             data-machine="T-4F"
+             data-temp="69"
+             data-vibration="2.0"
+             data-utilization="71"
+             data-status="NORMAL">
+
+            <div class="machine-tag">
+                T-4F <b>71%</b>
+            </div>
+
+            <div class="robot">
+                <div class="robot-base"></div>
+                <div class="robot-column"></div>
+                <div class="robot-joint joint-a"></div>
+                <div class="robot-segment segment-a"></div>
+                <div class="robot-joint joint-b"></div>
+                <div class="robot-segment segment-b"></div>
+                <div class="robot-tool"></div>
+            </div>
+        </div>
+
+        <!-- ROBOT M7 -->
+
+        <div class="machine m7"
+             data-machine="R-F2"
+             data-temp="70"
+             data-vibration="2.4"
+             data-utilization="56"
+             data-status="NORMAL">
+
+            <div class="machine-tag">
+                R-F2 <b>56%</b>
+            </div>
+
+            <div class="robot">
+                <div class="robot-base"></div>
+                <div class="robot-column"></div>
+                <div class="robot-joint joint-a"></div>
+                <div class="robot-segment segment-a"></div>
+                <div class="robot-joint joint-b"></div>
+                <div class="robot-segment segment-b"></div>
+                <div class="robot-tool"></div>
+            </div>
+        </div>
+
+        <!-- ROBOT M8 -->
+
+        <div class="machine m8"
+             data-machine="C-T5"
+             data-temp="73"
+             data-vibration="2.7"
+             data-utilization="53"
+             data-status="NORMAL">
+
+            <div class="machine-tag">
+                C-T5 <b>53%</b>
+            </div>
+
+            <div class="robot">
+                <div class="robot-base"></div>
+                <div class="robot-column"></div>
+                <div class="robot-joint joint-a"></div>
+                <div class="robot-segment segment-a"></div>
+                <div class="robot-joint joint-b"></div>
+                <div class="robot-segment segment-b"></div>
+                <div class="robot-tool"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- DEVICE STATS -->
+
+    <div class="device-card">
+
+        <div class="device-head">
+            <span>TOTAL NUMBER OF DEVICES</span>
+            <span>↗</span>
+        </div>
+
+        <div class="device-number">
+            201 <small>Devices</small>
+        </div>
+
+        <div class="device-grid">
+
+            <div class="device-stat">
+                <span>WORKING</span>
+                <b style="color:var(--green)">192</b>
+            </div>
+
+            <div class="device-stat">
+                <span>UNDER REPAIR</span>
+                <b style="color:var(--orange)">4</b>
+            </div>
+
+            <div class="device-stat">
+                <span>TO BE REPAIRED</span>
+                <b style="color:var(--red)">5</b>
+            </div>
+
+            <div class="device-stat">
+                <span>HEALTH SCORE</span>
+                <b>94.6%</b>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INCIDENT -->
+
+    <div class="incident">
+
+        <div>
+            <div class="incident-title">
+                ⚠ Overheating Detected — Unit Z-8X
+            </div>
+
+            <div class="incident-meta">
+                Cooling system unresponsive
+                &nbsp; • &nbsp;
+                Zone A-01 — Bay D
+            </div>
+        </div>
+
+        <div class="incident-temp">
+            Temperature: ● 92°C
+        </div>
+
+    </div>
+
+</main>
 
                 <div class="factory-line line1"></div>
                 <div class="factory-line line2"></div>
