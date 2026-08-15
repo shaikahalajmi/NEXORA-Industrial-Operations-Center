@@ -1,532 +1,1536 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>NEXORA | Industrial Operations Center</title>
+<title>NEXORA | Industrial Operations Center</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        body {
-            font-family: Arial, sans-serif;
-            background:
-                radial-gradient(circle at 50% 20%, #123c34 0%, #071411 35%, #030807 75%);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+<style>
+:root{
+    --bg:#06100d;
+    --panel:#0b1814;
+    --panel2:#0d1d18;
+    --line:rgba(123,255,173,.14);
+    --green:#7dff76;
+    --lime:#b5ff35;
+    --red:#ff655d;
+    --orange:#ffad58;
+    --cyan:#78f5df;
+    --text:#ecf6f2;
+    --muted:#82958e;
+}
 
-        /* HEADER */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        header {
-            height: 72px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            border-bottom: 1px solid rgba(105, 255, 180, 0.15);
-            background: rgba(3, 10, 8, 0.85);
-        }
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:
+        radial-gradient(circle at 30% 20%,rgba(56,130,81,.11),transparent 35%),
+        #07100e;
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+}
 
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 4px;
-        }
+button,select{
+    font:inherit;
+}
 
-        .logo span {
-            color: #62ff9f;
-        }
+.app{
+    width:min(1480px,96vw);
+    margin:24px auto;
+    border:1px solid rgba(146,255,179,.16);
+    border-radius:18px;
+    overflow:hidden;
+    background:#07110e;
+    box-shadow:0 40px 100px rgba(0,0,0,.55);
+}
 
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #a7b9b2;
-            font-size: 13px;
-        }
+/* TOP BAR */
 
-        .status-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #62ff9f;
-            box-shadow: 0 0 12px #62ff9f;
-        }
+.topbar{
+    height:74px;
+    display:grid;
+    grid-template-columns:220px 1fr 70px;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+    background:rgba(6,16,13,.97);
+}
 
-        /* MAIN */
+.brand{
+    padding-left:22px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
 
-        .dashboard {
-            padding: 25px 32px 35px;
-        }
+.brand-mark{
+    width:34px;
+    height:34px;
+    border-radius:9px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(145deg,var(--lime),#32b75e);
+    color:#08110d;
+    font-weight:900;
+}
 
-        .top {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            margin-bottom: 22px;
-        }
+.brand-text strong{
+    display:block;
+    letter-spacing:2px;
+    font-size:14px;
+}
 
-        .top h1 {
-            font-size: 25px;
-            margin-bottom: 6px;
-        }
+.brand-text span{
+    display:block;
+    color:var(--muted);
+    font-size:9px;
+    margin-top:3px;
+    letter-spacing:1px;
+}
 
-        .top p {
-            color: #71857d;
-            font-size: 13px;
-        }
+.timeline{
+    height:100%;
+    display:flex;
+    align-items:center;
+    padding:0 16px;
+}
 
-        .live {
-            color: #62ff9f;
-            font-size: 12px;
-            letter-spacing: 2px;
-        }
+.timeline-wrap{
+    width:100%;
+}
 
-        /* GRID */
+.timeline-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+    padding-top:15px;
+}
 
-        .operations-grid {
-            display: grid;
-            grid-template-columns: 230px 1fr 300px;
-            gap: 16px;
-            min-height: 680px;
-        }
+.timeline-row:before{
+    content:"";
+    position:absolute;
+    top:7px;
+    left:0;
+    right:0;
+    height:1px;
+    background:rgba(255,255,255,.08);
+}
 
-        .panel {
-            background: rgba(8, 20, 17, 0.86);
-            border: 1px solid rgba(103, 255, 180, 0.14);
-            border-radius: 15px;
-            padding: 18px;
-            box-shadow: 0 20px 50px rgba(0,0,0,.25);
-        }
+.time{
+    position:relative;
+    font-size:10px;
+    color:#8ca198;
+}
 
-        .panel-title {
-            color: #8fa49c;
-            font-size: 11px;
-            letter-spacing: 1.6px;
-            margin-bottom: 18px;
-        }
+.time:before{
+    content:"";
+    position:absolute;
+    top:-11px;
+    left:50%;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:#53675f;
+    transform:translateX(-50%);
+}
 
-        /* LEFT PANEL */
+.time.event:before{
+    background:var(--green);
+    box-shadow:0 0 10px var(--green);
+}
 
-        .metric {
-            padding: 17px 0;
-            border-bottom: 1px solid rgba(255,255,255,.06);
-        }
+.time.alert-event:before{
+    background:var(--red);
+    box-shadow:0 0 10px var(--red);
+}
 
-        .metric:last-child {
-            border-bottom: none;
-        }
+.timeline-highlight{
+    position:absolute;
+    height:39px;
+    width:25%;
+    left:42%;
+    border:1px solid var(--lime);
+    background:rgba(177,255,56,.04);
+    top:-12px;
+    box-shadow:inset 0 0 15px rgba(177,255,56,.06);
+}
 
-        .metric-value {
-            font-size: 30px;
-            font-weight: bold;
-        }
+.ai-btn-wrap{
+    display:grid;
+    place-items:center;
+}
 
-        .metric-label {
-            color: #71857d;
-            font-size: 12px;
-            margin-top: 5px;
-        }
+.ai-btn{
+    width:40px;
+    height:40px;
+    border:1px solid rgba(112,150,255,.22);
+    border-radius:10px;
+    background:linear-gradient(145deg,#163c64,#18294c);
+    color:#a7cfff;
+    cursor:pointer;
+}
 
-        .green {
-            color: #62ff9f;
-        }
+/* MAIN */
 
-        .orange {
-            color: #ffbd59;
-        }
+.main-grid{
+    display:grid;
+    grid-template-columns:68px 1fr 330px;
+    min-height:760px;
+}
 
-        .red {
-            color: #ff5d6c;
-        }
+/* SIDEBAR */
 
-        /* FACTORY */
+.sidebar{
+    border-right:1px solid var(--line);
+    padding:18px 12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    background:#081411;
+}
 
-        .factory {
-            position: relative;
-            overflow: hidden;
-            min-height: 680px;
-            background:
-                linear-gradient(rgba(97,255,160,.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(97,255,160,.025) 1px, transparent 1px),
-                radial-gradient(circle at center, #123128 0%, #07110e 65%);
-            background-size: 35px 35px;
-        }
+.nav-top,
+.nav-bottom{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
 
-        .factory::before {
-            content: "";
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            border: 1px solid rgba(98,255,159,.08);
-            border-radius: 50%;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
+.nav-btn{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,.07);
+    background:#0d1c18;
+    color:#8fa39b;
+    cursor:pointer;
+    transition:.2s;
+}
 
-        .factory-header {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            justify-content: space-between;
-        }
+.nav-btn:hover,
+.nav-btn.active{
+    color:#fff;
+    border-color:rgba(125,255,118,.4);
+    background:#143226;
+    box-shadow:0 0 20px rgba(125,255,118,.08);
+}
 
-        .factory-header span {
-            color: #62ff9f;
-            font-size: 12px;
-        }
+/* FACTORY AREA */
 
-        .machine {
-            position: absolute;
-            width: 105px;
-            height: 105px;
-            border-radius: 16px;
-            border: 1px solid rgba(98,255,159,.35);
-            background: linear-gradient(145deg,#15382e,#081611);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: .25s;
-            box-shadow: 0 0 25px rgba(98,255,159,.05);
-        }
+.center{
+    position:relative;
+    overflow:hidden;
+    background:
+        linear-gradient(rgba(133,255,174,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(133,255,174,.025) 1px,transparent 1px),
+        radial-gradient(circle at 50% 45%,rgba(43,101,68,.18),transparent 52%),
+        #07110e;
+    background-size:38px 38px,38px 38px,auto,auto;
+}
 
-        .machine:hover {
-            transform: translateY(-7px);
-            border-color: #62ff9f;
-            box-shadow: 0 0 30px rgba(98,255,159,.18);
-        }
+.center:before{
+    content:"";
+    position:absolute;
+    width:720px;
+    height:430px;
+    left:50%;
+    top:52%;
+    transform:translate(-50%,-50%) rotateX(60deg) rotateZ(-30deg);
+    border:1px solid rgba(151,255,183,.08);
+    background:
+        linear-gradient(rgba(125,255,118,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(125,255,118,.045) 1px,transparent 1px),
+        rgba(8,23,18,.55);
+    background-size:44px 44px;
+    box-shadow:0 50px 100px rgba(0,0,0,.65);
+}
 
-        .machine-icon {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
+.center-header{
+    position:relative;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:17px 19px;
+}
 
-        .machine-name {
-            font-size: 11px;
-            color: #c8d5d0;
-        }
+.zone-select{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
 
-        .machine-state {
-            font-size: 9px;
-            margin-top: 4px;
-            color: #62ff9f;
-        }
+.zone-select label{
+    color:#758a82;
+    font-size:9px;
+}
 
-        .m1 { left: 12%; top: 23%; }
-        .m2 { left: 41%; top: 18%; }
-        .m3 { right: 11%; top: 28%; }
+.zone-select select{
+    color:#dbe7e2;
+    background:#0c1915;
+    border:1px solid rgba(255,255,255,.07);
+    padding:7px 9px;
+    border-radius:7px;
+    outline:none;
+}
 
-        .m4 { left: 21%; bottom: 20%; }
-        .m5 { left: 48%; bottom: 15%; }
-        .m6 { right: 10%; bottom: 22%; }
+.live-indicator{
+    font-size:10px;
+    color:var(--green);
+    letter-spacing:1px;
+}
 
-        /* CENTER CORE */
+.factory-stage{
+    position:absolute;
+    inset:70px 20px 20px;
+}
 
-        .core {
-            position: absolute;
-            left: 50%;
-            top: 49%;
-            transform: translate(-50%, -50%);
-            width: 125px;
-            height: 125px;
-            border-radius: 50%;
-            border: 1px solid #62ff9f;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background: rgba(7,25,19,.94);
-            box-shadow:
-                0 0 35px rgba(98,255,159,.18),
-                inset 0 0 25px rgba(98,255,159,.06);
-        }
+/* FACTORY SHAPES */
 
-        .core strong {
-            color: #62ff9f;
-            font-size: 23px;
-        }
+.factory-line{
+    position:absolute;
+    background:linear-gradient(145deg,#172a24,#0b1713);
+    border:1px solid rgba(180,255,199,.08);
+    height:55px;
+    border-radius:8px;
+    transform:skewY(-13deg);
+    box-shadow:0 22px 30px rgba(0,0,0,.35);
+}
 
-        .core span {
-            color: #71857d;
-            font-size: 9px;
-            margin-top: 5px;
-        }
+.line1{
+    width:270px;
+    left:11%;
+    top:20%;
+}
 
-        /* RIGHT */
+.line2{
+    width:310px;
+    right:11%;
+    top:30%;
+}
 
-        .chart {
-            height: 155px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            padding: 14px;
-            background: rgba(255,255,255,.025);
-            border: 1px solid rgba(255,255,255,.04);
-        }
+.line3{
+    width:300px;
+    left:15%;
+    top:54%;
+}
 
-        .chart h3 {
-            font-size: 12px;
-            margin-bottom: 15px;
-        }
+.line4{
+    width:330px;
+    right:8%;
+    top:65%;
+}
 
-        .bars {
-            height: 90px;
-            display: flex;
-            align-items: end;
-            gap: 10px;
-        }
+.factory-box{
+    position:absolute;
+    width:115px;
+    height:84px;
+    border-radius:7px;
+    background:
+        linear-gradient(135deg,#294139,#0e1b17);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:
+        14px 16px 0 rgba(2,8,6,.55),
+        0 22px 35px rgba(0,0,0,.4);
+    transform:skewY(-13deg);
+}
 
-        .bar {
-            flex: 1;
-            background: linear-gradient(#62ff9f,#1b7046);
-            border-radius: 3px 3px 0 0;
-            opacity: .85;
-        }
+.box1{left:15%;top:25%;}
+.box2{left:38%;top:15%;}
+.box3{right:20%;top:23%;}
+.box4{left:25%;top:57%;}
+.box5{right:31%;top:54%;}
 
-        /* ALERT */
+/* MACHINE NODES */
 
-        .alert {
-            position: absolute;
-            left: 18px;
-            right: 18px;
-            bottom: 18px;
-            padding: 13px 16px;
-            border-radius: 9px;
-            background: rgba(61, 16, 20, .92);
-            border: 1px solid rgba(255,93,108,.45);
-            color: #ffadb5;
-            font-size: 11px;
-        }
+.machine{
+    position:absolute;
+    width:82px;
+    height:118px;
+    z-index:7;
+    cursor:pointer;
+    transition:.25s ease;
+}
 
-        /* MOBILE */
+.machine:hover{
+    transform:translateY(-8px) scale(1.04);
+}
 
-        @media (max-width: 1000px) {
-            .operations-grid {
-                grid-template-columns: 1fr;
-            }
+.machine-base{
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%) rotateX(60deg);
+    width:78px;
+    height:42px;
+    border-radius:50%;
+    background:rgba(79,255,117,.15);
+    border:1px solid rgba(125,255,118,.7);
+    box-shadow:
+        0 0 28px rgba(125,255,118,.2),
+        inset 0 0 16px rgba(125,255,118,.16);
+}
 
-            .factory {
-                min-height: 650px;
-            }
-        }
-    </style>
+.machine-arm{
+    position:absolute;
+    width:12px;
+    height:69px;
+    background:linear-gradient(#d8fff0,#72b698);
+    border-radius:10px;
+    left:34px;
+    bottom:24px;
+    box-shadow:0 0 12px rgba(146,255,196,.23);
+    transform:rotate(5deg);
+    transform-origin:bottom;
+}
+
+.machine-arm:before{
+    content:"";
+    position:absolute;
+    width:45px;
+    height:12px;
+    left:2px;
+    top:3px;
+    border-radius:10px;
+    background:linear-gradient(90deg,#95d7b7,#d7fff0);
+    transform:rotate(-33deg);
+    transform-origin:left;
+}
+
+.machine-arm:after{
+    content:"";
+    position:absolute;
+    width:17px;
+    height:17px;
+    border-radius:50%;
+    background:#e5fff5;
+    border:3px solid #75c59f;
+    left:-3px;
+    top:-2px;
+}
+
+.machine-tag{
+    position:absolute;
+    left:48px;
+    top:-6px;
+    white-space:nowrap;
+    padding:5px 8px;
+    border-radius:6px;
+    font-size:9px;
+    color:#dcebe4;
+    background:#12221d;
+    border:1px solid rgba(124,255,118,.2);
+}
+
+.machine-tag b{
+    color:var(--green);
+    margin-left:5px;
+}
+
+.machine.warning .machine-base{
+    border-color:var(--orange);
+    background:rgba(255,173,88,.14);
+    box-shadow:0 0 28px rgba(255,173,88,.18);
+}
+
+.machine.warning .machine-tag b{
+    color:var(--orange);
+}
+
+.machine.critical .machine-base{
+    border-color:var(--red);
+    background:rgba(255,101,93,.18);
+    box-shadow:0 0 32px rgba(255,101,93,.28);
+}
+
+.machine.critical .machine-arm,
+.machine.critical .machine-arm:before{
+    background:linear-gradient(#ff9a80,#ff634f);
+}
+
+.machine.critical .machine-tag b{
+    color:var(--red);
+}
+
+.m1{left:14%;top:15%;}
+.m2{left:39%;top:12%;}
+.m3{right:18%;top:19%;}
+.m4{left:23%;top:45%;}
+.m5{left:48%;top:48%;}
+.m6{right:14%;top:48%;}
+.m7{left:35%;top:68%;}
+.m8{right:28%;top:68%;}
+
+/* DEVICE CARD */
+
+.device-card{
+    position:absolute;
+    z-index:15;
+    left:18px;
+    bottom:18px;
+    width:245px;
+    padding:15px;
+    border-radius:11px;
+    background:rgba(10,24,20,.94);
+    border:1px solid rgba(255,255,255,.07);
+    backdrop-filter:blur(9px);
+}
+
+.device-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.device-head span{
+    color:#80938c;
+    font-size:9px;
+}
+
+.device-number{
+    font-size:29px;
+    margin:6px 0 13px;
+}
+
+.device-number small{
+    color:#73877f;
+    font-size:10px;
+    font-weight:400;
+}
+
+.device-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.device-stat{
+    padding:9px;
+    border-radius:7px;
+    background:rgba(255,255,255,.025);
+}
+
+.device-stat span{
+    display:block;
+    font-size:8px;
+    color:#70847c;
+}
+
+.device-stat b{
+    display:block;
+    font-size:18px;
+    margin-top:4px;
+}
+
+/* INCIDENT */
+
+.incident{
+    position:absolute;
+    z-index:17;
+    bottom:18px;
+    left:280px;
+    right:18px;
+    min-height:56px;
+    padding:11px 15px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:linear-gradient(90deg,rgba(89,15,17,.94),rgba(56,17,17,.86));
+    border:1px solid rgba(255,93,83,.32);
+    box-shadow:0 15px 30px rgba(0,0,0,.25);
+}
+
+.incident-title{
+    font-size:11px;
+    color:#ffd7d3;
+}
+
+.incident-meta{
+    margin-top:4px;
+    font-size:8px;
+    color:#bf908d;
+}
+
+.incident-temp{
+    color:#ff8279;
+    font-size:11px;
+}
+
+/* RIGHT ANALYTICS */
+
+.analytics{
+    padding:14px;
+    border-left:1px solid var(--line);
+    background:#081411;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.chart-card{
+    flex:1;
+    min-height:0;
+    border-radius:11px;
+    padding:13px;
+    background:#0c1a16;
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.chart-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+}
+
+.chart-head strong{
+    font-size:10px;
+}
+
+.chart-head span{
+    color:#758980;
+    font-size:11px;
+}
+
+.canvas-wrap{
+    height:180px;
+}
+
+/* MACHINE PANEL */
+
+.machine-panel{
+    position:fixed;
+    top:0;
+    right:-420px;
+    width:390px;
+    height:100vh;
+    background:#091713;
+    border-left:1px solid rgba(125,255,118,.18);
+    z-index:1000;
+    padding:24px;
+    transition:.35s ease;
+    box-shadow:-30px 0 70px rgba(0,0,0,.55);
+}
+
+.machine-panel.open{
+    right:0;
+}
+
+.panel-close{
+    position:absolute;
+    right:18px;
+    top:18px;
+    width:36px;
+    height:36px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,.09);
+    background:#10201b;
+    color:white;
+    cursor:pointer;
+}
+
+.panel-machine-title{
+    margin-top:42px;
+    font-size:25px;
+}
+
+.panel-status{
+    color:var(--green);
+    margin-top:7px;
+    font-size:11px;
+    letter-spacing:1px;
+}
+
+.detail-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:27px;
+}
+
+.detail{
+    padding:14px;
+    background:#0e211b;
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.detail span{
+    font-size:9px;
+    color:#789087;
+}
+
+.detail b{
+    display:block;
+    font-size:19px;
+    margin-top:6px;
+}
+
+.ai-analysis{
+    margin-top:22px;
+    padding:16px;
+    border-radius:10px;
+    background:rgba(125,255,118,.05);
+    border:1px solid rgba(125,255,118,.16);
+}
+
+.ai-analysis h3{
+    font-size:11px;
+    color:var(--green);
+    margin-bottom:9px;
+}
+
+.ai-analysis p{
+    color:#95aaa1;
+    line-height:1.7;
+    font-size:10px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1050px){
+    .main-grid{
+        grid-template-columns:58px 1fr;
+    }
+
+    .analytics{
+        grid-column:1 / -1;
+        border-left:none;
+        border-top:1px solid var(--line);
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .topbar{
+        grid-template-columns:180px 1fr 60px;
+    }
+}
+
+@media(max-width:760px){
+    .timeline{
+        display:none;
+    }
+
+    .topbar{
+        grid-template-columns:1fr 60px;
+    }
+
+    .main-grid{
+        display:block;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .center{
+        min-height:760px;
+    }
+
+    .analytics{
+        display:block;
+    }
+
+    .chart-card{
+        height:230px;
+        margin-bottom:10px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<header>
-    <div class="logo">
-        NEX<span>O</span>RA
-    </div>
+<div class="app">
 
-    <div class="system-status">
-        <div class="status-dot"></div>
-        INDUSTRIAL NETWORK ONLINE
-    </div>
-</header>
+    <!-- TOP -->
+    <header class="topbar">
 
-
-<main class="dashboard">
-
-    <div class="top">
-        <div>
-            <h1>Industrial Operations Center</h1>
-            <p>Real-time equipment intelligence & operational monitoring</p>
+        <div class="brand">
+            <div class="brand-mark">N</div>
+            <div class="brand-text">
+                <strong>NEXORA</strong>
+                <span>INDUSTRIAL INTELLIGENCE</span>
+            </div>
         </div>
 
-        <div class="live">
-            ● LIVE OPERATIONS
+        <div class="timeline">
+            <div class="timeline-wrap">
+                <div class="timeline-row">
+                    <div class="timeline-highlight"></div>
+
+                    <span class="time alert-event">10:00</span>
+                    <span class="time">10:05</span>
+                    <span class="time event">10:10</span>
+                    <span class="time">10:15</span>
+                    <span class="time event">10:20</span>
+                    <span class="time">10:25</span>
+                    <span class="time">10:30</span>
+                    <span class="time alert-event">10:35</span>
+                    <span class="time">10:40</span>
+                    <span class="time event">10:45</span>
+                    <span class="time">10:50</span>
+                    <span class="time">10:55</span>
+                    <span class="time">11:00</span>
+                    <span class="time">11:05</span>
+                </div>
+            </div>
         </div>
+
+        <div class="ai-btn-wrap">
+            <button class="ai-btn">✦</button>
+        </div>
+
+    </header>
+
+    <div class="main-grid">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="nav-top">
+                <button class="nav-btn">⌂</button>
+                <button class="nav-btn">▦</button>
+                <button class="nav-btn active">⚙</button>
+                <button class="nav-btn">☷</button>
+                <button class="nav-btn">⌗</button>
+            </div>
+
+            <div class="nav-bottom">
+                <button class="nav-btn">⚙</button>
+            </div>
+
+        </aside>
+
+        <!-- CENTER -->
+        <main class="center">
+
+            <div class="center-header">
+
+                <div class="zone-select">
+                    <label>SELECT ZONE</label>
+
+                    <select>
+                        <option>Zone A-01</option>
+                        <option>Zone B-02</option>
+                        <option>Zone C-03</option>
+                    </select>
+                </div>
+
+                <div class="live-indicator">
+                    ● LIVE SYSTEM
+                </div>
+
+            </div>
+
+            <div class="factory-stage">
+
+                <div class="factory-line line1"></div>
+                <div class="factory-line line2"></div>
+                <div class="factory-line line3"></div>
+                <div class="factory-line line4"></div>
+
+                <div class="factory-box box1"></div>
+                <div class="factory-box box2"></div>
+                <div class="factory-box box3"></div>
+                <div class="factory-box box4"></div>
+                <div class="factory-box box5"></div>
+
+                <div class="machine m1"
+                     data-machine="R-F3"
+                     data-temp="68"
+                     data-vibration="2.1"
+                     data-utilization="78"
+                     data-status="NORMAL">
+
+                    <div class="machine-tag">
+                        R-F3 <b>78%</b>
+                    </div>
+
+                    <div class="machine-arm"></div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <div class="machine m2"
+                     data-machine="T-9R"
+                     data-temp="65"
+                     data-vibration="1.7"
+                     data-utilization="65"
+                     data-status="NORMAL">
+
+                    <div class="machine-tag">
+                        T-9R <b>65%</b>
+                    </div>
+
+                    <div class="machine-arm"></div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <div class="machine m3"
+                     data-machine="T-8R"
+                     data-temp="71"
+                     data-vibration="2.9"
+                     data-utilization="68"
+                     data-status="NORMAL">
+
+                    <div class="machine-tag">
+                        T-8R <b>68%</b>
+                    </div>
+
+                    <div class="machine-arm"></div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <div class="machine m4 warning"
+                     data-machine="C-T2"
+                     data-temp="82"
+                     data-vibration="4.5"
+                     data-utilization="83"
+                     data-status="WARNING">
+
+                    <div class="machine-tag">
+                        C-T2 <b>83%</b>
+                    </div>
+
+                    <div class="machine-arm"></div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <div class="machine m5 critical"
+                     data-machine="Z-8X"
+                     data-temp="92"
+                     data-vibration="7.8"
+                     data-utilization="14"
+                     data-status="CRITICAL">
+
+                    <div class="machine-tag">
+                        Z-8X <b>14%</b>
+                    </div>
+
+                    <div class="machine-arm"></div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <div class="machine m6"
+                     data-machine="T-4F"
+                     data-temp="69"
+                     data-vibration="2.0"
+                     data-utilization="71"
+                     data-status="NORMAL">
+
+                    <div class="machine-tag">
+                        T-4F <b>71%</b>
+                    </div>
+
+                    <div class="machine-arm"></div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <div class="machine m7"
+                     data-machine="R-F2"
+                     data-temp="70"
+                     data-vibration="2.4"
+                     data-utilization="56"
+                     data-status="NORMAL">
+
+                    <div class="machine-tag">
+                        R-F2 <b>56%</b>
+                    </div>
+
+                    <div class="machine-arm"></div>
+                    <div class="machine-base"></div>
+                </div>
+
+                <div class="machine m8"
+                     data-machine="C-T5"
+                     data-temp="73"
+                     data-vibration="2.7"
+                     data-utilization="53"
+                     data-status="NORMAL">
+
+                    <div class="machine-tag">
+                        C-T5 <b>53%</b>
+                    </div>
+
+                    <div class="machine-arm"></div>
+                    <div class="machine-base"></div>
+                </div>
+
+            </div>
+
+            <!-- DEVICE STATS -->
+            <div class="device-card">
+
+                <div class="device-head">
+                    <span>TOTAL NUMBER OF DEVICES</span>
+                    <span>↗</span>
+                </div>
+
+                <div class="device-number">
+                    201 <small>Devices</small>
+                </div>
+
+                <div class="device-grid">
+
+                    <div class="device-stat">
+                        <span>WORKING</span>
+                        <b style="color:var(--green)">192</b>
+                    </div>
+
+                    <div class="device-stat">
+                        <span>UNDER REPAIR</span>
+                        <b style="color:var(--orange)">4</b>
+                    </div>
+
+                    <div class="device-stat">
+                        <span>TO BE REPAIRED</span>
+                        <b style="color:var(--red)">5</b>
+                    </div>
+
+                    <div class="device-stat">
+                        <span>HEALTH SCORE</span>
+                        <b>94.6%</b>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- INCIDENT -->
+            <div class="incident">
+
+                <div>
+                    <div class="incident-title">
+                        ⚠ Overheating Detected — Unit Z-8X
+                    </div>
+
+                    <div class="incident-meta">
+                        Cooling system unresponsive &nbsp; • &nbsp;
+                        Zone A-01 — Bay D
+                    </div>
+                </div>
+
+                <div class="incident-temp">
+                    Temperature: ● 92°C
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- ANALYTICS -->
+        <aside class="analytics">
+
+            <div class="chart-card">
+
+                <div class="chart-head">
+                    <strong>Equipment Metrics</strong>
+                    <span>ⓘ</span>
+                </div>
+
+                <div class="canvas-wrap">
+                    <canvas id="metricsChart"></canvas>
+                </div>
+
+            </div>
+
+            <div class="chart-card">
+
+                <div class="chart-head">
+                    <strong>Equipment Utilization by Station</strong>
+                    <span>ⓘ</span>
+                </div>
+
+                <div class="canvas-wrap">
+                    <canvas id="utilizationChart"></canvas>
+                </div>
+
+            </div>
+
+            <div class="chart-card">
+
+                <div class="chart-head">
+                    <strong>OEE Over Time</strong>
+                    <span>ⓘ</span>
+                </div>
+
+                <div class="canvas-wrap">
+                    <canvas id="oeeChart"></canvas>
+                </div>
+
+            </div>
+
+        </aside>
+
     </div>
 
+</div>
 
-    <div class="operations-grid">
+<!-- MACHINE DETAIL PANEL -->
 
-        <!-- LEFT -->
+<div class="machine-panel" id="machinePanel">
 
-        <section class="panel">
+    <button class="panel-close" onclick="closeMachinePanel()">×</button>
 
-            <div class="panel-title">
-                FLEET STATUS
-            </div>
+    <div class="panel-machine-title" id="panelMachine">
+        Z-8X
+    </div>
 
-            <div class="metric">
-                <div class="metric-value">201</div>
-                <div class="metric-label">Connected Devices</div>
-            </div>
+    <div class="panel-status" id="panelStatus">
+        ● CRITICAL
+    </div>
 
-            <div class="metric">
-                <div class="metric-value green">192</div>
-                <div class="metric-label">Operating Normally</div>
-            </div>
+    <div class="detail-grid">
 
-            <div class="metric">
-                <div class="metric-value orange">6</div>
-                <div class="metric-label">Warning</div>
-            </div>
+        <div class="detail">
+            <span>TEMPERATURE</span>
+            <b id="panelTemp">92°C</b>
+        </div>
 
-            <div class="metric">
-                <div class="metric-value red">3</div>
-                <div class="metric-label">Critical</div>
-            </div>
+        <div class="detail">
+            <span>VIBRATION</span>
+            <b id="panelVibration">7.8 mm/s</b>
+        </div>
 
-            <div class="metric">
-                <div class="metric-value">94.6%</div>
-                <div class="metric-label">Operational Health</div>
-            </div>
+        <div class="detail">
+            <span>UTILIZATION</span>
+            <b id="panelUtilization">14%</b>
+        </div>
 
-        </section>
-
-
-        <!-- FACTORY -->
-
-        <section class="panel factory">
-
-            <div class="factory-header">
-                <div class="panel-title">
-                    LIVE FACTORY MAP
-                </div>
-
-                <span>ZONE A-01</span>
-            </div>
-
-
-            <div class="machine m1">
-                <div class="machine-icon">⚙</div>
-                <div class="machine-name">UNIT M-01</div>
-                <div class="machine-state">● NORMAL</div>
-            </div>
-
-
-            <div class="machine m2">
-                <div class="machine-icon">⚙</div>
-                <div class="machine-name">UNIT M-02</div>
-                <div class="machine-state">● NORMAL</div>
-            </div>
-
-
-            <div class="machine m3">
-                <div class="machine-icon">⚙</div>
-                <div class="machine-name">UNIT M-03</div>
-                <div class="machine-state">● NORMAL</div>
-            </div>
-
-
-            <div class="machine m4">
-                <div class="machine-icon">⚙</div>
-                <div class="machine-name">UNIT M-04</div>
-                <div class="machine-state">● NORMAL</div>
-            </div>
-
-
-            <div class="machine m5">
-                <div class="machine-icon">⚙</div>
-                <div class="machine-name">UNIT M-05</div>
-                <div class="machine-state">● NORMAL</div>
-            </div>
-
-
-            <div class="machine m6">
-                <div class="machine-icon">⚙</div>
-                <div class="machine-name">UNIT M-06</div>
-                <div class="machine-state">● NORMAL</div>
-            </div>
-
-
-            <div class="core">
-                <strong>94.6%</strong>
-                <span>PLANT HEALTH</span>
-            </div>
-
-
-            <div class="alert">
-                ⚠ SYSTEM MONITORING ACTIVE — No immediate operator action required
-            </div>
-
-        </section>
-
-
-        <!-- RIGHT -->
-
-        <section class="panel">
-
-            <div class="panel-title">
-                LIVE ANALYTICS
-            </div>
-
-            <div class="chart">
-
-                <h3>Equipment Utilization</h3>
-
-                <div class="bars">
-                    <div class="bar" style="height:45%"></div>
-                    <div class="bar" style="height:72%"></div>
-                    <div class="bar" style="height:58%"></div>
-                    <div class="bar" style="height:88%"></div>
-                    <div class="bar" style="height:67%"></div>
-                    <div class="bar" style="height:95%"></div>
-                </div>
-
-            </div>
-
-
-            <div class="chart">
-
-                <h3>Operational Performance</h3>
-
-                <div class="bars">
-                    <div class="bar" style="height:65%"></div>
-                    <div class="bar" style="height:80%"></div>
-                    <div class="bar" style="height:52%"></div>
-                    <div class="bar" style="height:91%"></div>
-                    <div class="bar" style="height:75%"></div>
-                </div>
-
-            </div>
-
-
-            <div class="chart">
-
-                <h3>System Intelligence</h3>
-
-                <p style="
-                    color:#71857d;
-                    font-size:11px;
-                    line-height:1.8;
-                ">
-                    AI monitoring engine active.<br><br>
-
-                    <span class="green">
-                        ● 192 systems nominal
-                    </span>
-                    <br>
-
-                    <span class="orange">
-                        ● 6 require observation
-                    </span>
-                    <br>
-
-                    <span class="red">
-                        ● 3 require attention
-                    </span>
-                </p>
-
-            </div>
-
-        </section>
+        <div class="detail">
+            <span>ZONE</span>
+            <b>A-01</b>
+        </div>
 
     </div>
 
-</main>
+    <div class="ai-analysis">
+
+        <h3>✦ NEXORA AI ANALYSIS</h3>
+
+        <p id="aiRecommendation">
+            Elevated temperature and abnormal vibration detected.
+            Cooling system inspection is recommended immediately.
+        </p>
+
+    </div>
+
+</div>
+
+<script>
+
+/* =========================
+   CHART DEFAULTS
+========================= */
+
+Chart.defaults.color = "#758a82";
+Chart.defaults.borderColor = "rgba(255,255,255,.05)";
+
+const commonOptions = {
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+        legend:{
+            labels:{
+                boxWidth:8,
+                boxHeight:8,
+                font:{size:8}
+            }
+        }
+    },
+    scales:{
+        x:{
+            grid:{display:false},
+            ticks:{font:{size:8}}
+        },
+        y:{
+            grid:{
+                color:"rgba(255,255,255,.04)"
+            },
+            ticks:{font:{size:8}}
+        }
+    }
+};
+
+
+/* =========================
+   EQUIPMENT METRICS
+========================= */
+
+const metricsChart = new Chart(
+    document.getElementById("metricsChart"),
+    {
+        type:"bar",
+
+        data:{
+            labels:[
+                "Jan","Feb","Mar","Apr","May","Jun",
+                "Jul","Aug","Sep","Oct","Nov","Dec"
+            ],
+
+            datasets:[
+                {
+                    label:"Actual",
+                    data:[
+                        42,35,45,58,43,67,
+                        61,38,70,78,52,66
+                    ],
+                    backgroundColor:"#72f08a",
+                    borderRadius:2
+                },
+
+                {
+                    label:"Target",
+                    data:[
+                        48,42,50,61,55,75,
+                        70,55,78,83,65,80
+                    ],
+                    backgroundColor:"#d58d52",
+                    borderRadius:2
+                }
+            ]
+        },
+
+        options:commonOptions
+    }
+);
+
+
+/* =========================
+   UTILIZATION
+========================= */
+
+const utilizationChart = new Chart(
+    document.getElementById("utilizationChart"),
+    {
+        type:"bar",
+
+        data:{
+            labels:[
+                "Riveting",
+                "Packing",
+                "Cutting",
+                "Labeling"
+            ],
+
+            datasets:[
+                {
+                    label:"Active",
+                    data:[75,55,68,91],
+                    backgroundColor:"#74e68c"
+                },
+
+                {
+                    label:"Idle",
+                    data:[16,26,21,14],
+                    backgroundColor:"#d58051"
+                },
+
+                {
+                    label:"Downtime",
+                    data:[18,12,23,17],
+                    backgroundColor:"#605baf"
+                }
+            ]
+        },
+
+        options:{
+            ...commonOptions,
+            scales:{
+                x:{
+                    stacked:true,
+                    grid:{display:false},
+                    ticks:{font:{size:8}}
+                },
+
+                y:{
+                    stacked:true,
+                    grid:{
+                        color:"rgba(255,255,255,.04)"
+                    },
+                    ticks:{font:{size:8}}
+                }
+            }
+        }
+    }
+);
+
+
+/* =========================
+   OEE CHART
+========================= */
+
+const oeeChart = new Chart(
+    document.getElementById("oeeChart"),
+    {
+        type:"line",
+
+        data:{
+            labels:[
+                "07:00",
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "12:00"
+            ],
+
+            datasets:[
+                {
+                    label:"Performance",
+                    data:[55,72,76,22,45,91],
+                    borderColor:"#70de81",
+                    backgroundColor:"transparent",
+                    tension:.35,
+                    pointRadius:3
+                },
+
+                {
+                    label:"Quality",
+                    data:[32,40,64,15,55,38],
+                    borderColor:"#6d6fd8",
+                    backgroundColor:"transparent",
+                    tension:.35,
+                    pointRadius:3
+                },
+
+                {
+                    label:"Availability",
+                    data:[63,82,79,89,72,96],
+                    borderColor:"#d88b52",
+                    backgroundColor:"transparent",
+                    tension:.35,
+                    pointRadius:3
+                }
+            ]
+        },
+
+        options:commonOptions
+    }
+);
+
+
+/* =========================
+   MACHINE INTERACTION
+========================= */
+
+const machines =
+document.querySelectorAll(".machine");
+
+machines.forEach(machine => {
+
+    machine.addEventListener(
+        "click",
+        () => openMachinePanel(machine)
+    );
+
+});
+
+
+function openMachinePanel(machine){
+
+    const name =
+        machine.dataset.machine;
+
+    const temp =
+        machine.dataset.temp;
+
+    const vibration =
+        machine.dataset.vibration;
+
+    const utilization =
+        machine.dataset.utilization;
+
+    const status =
+        machine.dataset.status;
+
+
+    document.getElementById(
+        "panelMachine"
+    ).innerText = name;
+
+
+    const statusElement =
+        document.getElementById(
+            "panelStatus"
+        );
+
+
+    statusElement.innerText =
+        "● " + status;
+
+
+    if(status === "CRITICAL"){
+
+        statusElement.style.color =
+            "#ff655d";
+
+    }
+
+    else if(status === "WARNING"){
+
+        statusElement.style.color =
+            "#ffad58";
+
+    }
+
+    else{
+
+        statusElement.style.color =
+            "#7dff76";
+
+    }
+
+
+    document.getElementById(
+        "panelTemp"
+    ).innerText =
+        temp + "°C";
+
+
+    document.getElementById(
+        "panelVibration"
+    ).innerText =
+        vibration + " mm/s";
+
+
+    document.getElementById(
+        "panelUtilization"
+    ).innerText =
+        utilization + "%";
+
+
+    let recommendation;
+
+    if(status === "CRITICAL"){
+
+        recommendation =
+        "Critical operating condition detected. " +
+        "High temperature and abnormal vibration " +
+        "indicate an immediate inspection requirement.";
+
+    }
+
+    else if(status === "WARNING"){
+
+        recommendation =
+        "Operating conditions require observation. " +
+        "Schedule inspection and continue monitoring.";
+
+    }
+
+    else{
+
+        recommendation =
+        "Machine operating parameters are within " +
+        "normal limits. Continue standard monitoring.";
+
+    }
+
+
+    document.getElementById(
+        "aiRecommendation"
+    ).innerText =
+        recommendation;
+
+
+    document.getElementById(
+        "machinePanel"
+    ).classList.add("open");
+
+
+    updateCharts(
+        Number(utilization),
+        Number(temp)
+    );
+}
+
+
+function closeMachinePanel(){
+
+    document.getElementById(
+        "machinePanel"
+    ).classList.remove("open");
+
+}
+
+
+/* =========================
+   UPDATE CHARTS
+========================= */
+
+function updateCharts(utilization,temp){
+
+    utilizationChart.data.datasets[0].data =
+    [
+        utilization,
+        Math.max(30,utilization - 12),
+        Math.min(100,utilization + 8),
+        Math.max(25,utilization - 6)
+    ];
+
+    utilizationChart.update();
+
+
+    metricsChart.data.datasets[0].data =
+    metricsChart.data.datasets[0].data.map(
+        (value,index) => {
+
+            const variation =
+                ((temp - 70) * .4);
+
+            return Math.max(
+                10,
+                Math.min(
+                    100,
+                    value + variation +
+                    ((index % 2) * 3)
+                )
+            );
+
+        }
+    );
+
+    metricsChart.update();
+}
+
+
+/* =========================
+   AI BUTTON
+========================= */
+
+document.querySelector(
+    ".ai-btn"
+).addEventListener(
+    "click",
+    () => {
+
+        const critical =
+        document.querySelector(
+            ".machine.critical"
+        );
+
+        if(critical){
+
+            openMachinePanel(critical);
+
+        }
+
+    }
+);
+
+</script>
 
 </body>
 </html>
