@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NEXORA | Industrial Operations Center</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at 50% 20%, #123c34 0%, #071411 35%, #030807 75%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+
+        header {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid rgba(105, 255, 180, 0.15);
+            background: rgba(3, 10, 8, 0.85);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 4px;
+        }
+
+        .logo span {
+            color: #62ff9f;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #a7b9b2;
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #62ff9f;
+            box-shadow: 0 0 12px #62ff9f;
+        }
+
+        /* MAIN */
+
+        .dashboard {
+            padding: 25px 32px 35px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 22px;
+        }
+
+        .top h1 {
+            font-size: 25px;
+            margin-bottom: 6px;
+        }
+
+        .top p {
+            color: #71857d;
+            font-size: 13px;
+        }
+
+        .live {
+            color: #62ff9f;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        /* GRID */
+
+        .operations-grid {
+            display: grid;
+            grid-template-columns: 230px 1fr 300px;
+            gap: 16px;
+            min-height: 680px;
+        }
+
+        .panel {
+            background: rgba(8, 20, 17, 0.86);
+            border: 1px solid rgba(103, 255, 180, 0.14);
+            border-radius: 15px;
+            padding: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,.25);
+        }
+
+        .panel-title {
+            color: #8fa49c;
+            font-size: 11px;
+            letter-spacing: 1.6px;
+            margin-bottom: 18px;
+        }
+
+        /* LEFT PANEL */
+
+        .metric {
+            padding: 17px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-value {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .metric-label {
+            color: #71857d;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .green {
+            color: #62ff9f;
+        }
+
+        .orange {
+            color: #ffbd59;
+        }
+
+        .red {
+            color: #ff5d6c;
+        }
+
+        /* FACTORY */
+
+        .factory {
+            position: relative;
+            overflow: hidden;
+            min-height: 680px;
+            background:
+                linear-gradient(rgba(97,255,160,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(97,255,160,.025) 1px, transparent 1px),
+                radial-gradient(circle at center, #123128 0%, #07110e 65%);
+            background-size: 35px 35px;
+        }
+
+        .factory::before {
+            content: "";
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border: 1px solid rgba(98,255,159,.08);
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .factory-header {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .factory-header span {
+            color: #62ff9f;
+            font-size: 12px;
+        }
+
+        .machine {
+            position: absolute;
+            width: 105px;
+            height: 105px;
+            border-radius: 16px;
+            border: 1px solid rgba(98,255,159,.35);
+            background: linear-gradient(145deg,#15382e,#081611);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: .25s;
+            box-shadow: 0 0 25px rgba(98,255,159,.05);
+        }
+
+        .machine:hover {
+            transform: translateY(-7px);
+            border-color: #62ff9f;
+            box-shadow: 0 0 30px rgba(98,255,159,.18);
+        }
+
+        .machine-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .machine-name {
+            font-size: 11px;
+            color: #c8d5d0;
+        }
+
+        .machine-state {
+            font-size: 9px;
+            margin-top: 4px;
+            color: #62ff9f;
+        }
+
+        .m1 { left: 12%; top: 23%; }
+        .m2 { left: 41%; top: 18%; }
+        .m3 { right: 11%; top: 28%; }
+
+        .m4 { left: 21%; bottom: 20%; }
+        .m5 { left: 48%; bottom: 15%; }
+        .m6 { right: 10%; bottom: 22%; }
+
+        /* CENTER CORE */
+
+        .core {
+            position: absolute;
+            left: 50%;
+            top: 49%;
+            transform: translate(-50%, -50%);
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            border: 1px solid #62ff9f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: rgba(7,25,19,.94);
+            box-shadow:
+                0 0 35px rgba(98,255,159,.18),
+                inset 0 0 25px rgba(98,255,159,.06);
+        }
+
+        .core strong {
+            color: #62ff9f;
+            font-size: 23px;
+        }
+
+        .core span {
+            color: #71857d;
+            font-size: 9px;
+            margin-top: 5px;
+        }
+
+        /* RIGHT */
+
+        .chart {
+            height: 155px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            padding: 14px;
+            background: rgba(255,255,255,.025);
+            border: 1px solid rgba(255,255,255,.04);
+        }
+
+        .chart h3 {
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .bars {
+            height: 90px;
+            display: flex;
+            align-items: end;
+            gap: 10px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(#62ff9f,#1b7046);
+            border-radius: 3px 3px 0 0;
+            opacity: .85;
+        }
+
+        /* ALERT */
+
+        .alert {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 18px;
+            padding: 13px 16px;
+            border-radius: 9px;
+            background: rgba(61, 16, 20, .92);
+            border: 1px solid rgba(255,93,108,.45);
+            color: #ffadb5;
+            font-size: 11px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 1000px) {
+            .operations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .factory {
+                min-height: 650px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        NEX<span>O</span>RA
+    </div>
+
+    <div class="system-status">
+        <div class="status-dot"></div>
+        INDUSTRIAL NETWORK ONLINE
+    </div>
+</header>
+
+
+<main class="dashboard">
+
+    <div class="top">
+        <div>
+            <h1>Industrial Operations Center</h1>
+            <p>Real-time equipment intelligence & operational monitoring</p>
+        </div>
+
+        <div class="live">
+            ● LIVE OPERATIONS
+        </div>
+    </div>
+
+
+    <div class="operations-grid">
+
+        <!-- LEFT -->
+
+        <section class="panel">
+
+            <div class="panel-title">
+                FLEET STATUS
+            </div>
+
+            <div class="metric">
+                <div class="metric-value">201</div>
+                <div class="metric-label">Connected Devices</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-value green">192</div>
+                <div class="metric-label">Operating Normally</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-value orange">6</div>
+                <div class="metric-label">Warning</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-value red">3</div>
+                <div class="metric-label">Critical</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-value">94.6%</div>
+                <div class="metric-label">Operational Health</div>
+            </div>
+
+        </section>
+
+
+        <!-- FACTORY -->
+
+        <section class="panel factory">
+
+            <div class="factory-header">
+                <div class="panel-title">
+                    LIVE FACTORY MAP
+                </div>
+
+                <span>ZONE A-01</span>
+            </div>
+
+
+            <div class="machine m1">
+                <div class="machine-icon">⚙</div>
+                <div class="machine-name">UNIT M-01</div>
+                <div class="machine-state">● NORMAL</div>
+            </div>
+
+
+            <div class="machine m2">
+                <div class="machine-icon">⚙</div>
+                <div class="machine-name">UNIT M-02</div>
+                <div class="machine-state">● NORMAL</div>
+            </div>
+
+
+            <div class="machine m3">
+                <div class="machine-icon">⚙</div>
+                <div class="machine-name">UNIT M-03</div>
+                <div class="machine-state">● NORMAL</div>
+            </div>
+
+
+            <div class="machine m4">
+                <div class="machine-icon">⚙</div>
+                <div class="machine-name">UNIT M-04</div>
+                <div class="machine-state">● NORMAL</div>
+            </div>
+
+
+            <div class="machine m5">
+                <div class="machine-icon">⚙</div>
+                <div class="machine-name">UNIT M-05</div>
+                <div class="machine-state">● NORMAL</div>
+            </div>
+
+
+            <div class="machine m6">
+                <div class="machine-icon">⚙</div>
+                <div class="machine-name">UNIT M-06</div>
+                <div class="machine-state">● NORMAL</div>
+            </div>
+
+
+            <div class="core">
+                <strong>94.6%</strong>
+                <span>PLANT HEALTH</span>
+            </div>
+
+
+            <div class="alert">
+                ⚠ SYSTEM MONITORING ACTIVE — No immediate operator action required
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT -->
+
+        <section class="panel">
+
+            <div class="panel-title">
+                LIVE ANALYTICS
+            </div>
+
+            <div class="chart">
+
+                <h3>Equipment Utilization</h3>
+
+                <div class="bars">
+                    <div class="bar" style="height:45%"></div>
+                    <div class="bar" style="height:72%"></div>
+                    <div class="bar" style="height:58%"></div>
+                    <div class="bar" style="height:88%"></div>
+                    <div class="bar" style="height:67%"></div>
+                    <div class="bar" style="height:95%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="chart">
+
+                <h3>Operational Performance</h3>
+
+                <div class="bars">
+                    <div class="bar" style="height:65%"></div>
+                    <div class="bar" style="height:80%"></div>
+                    <div class="bar" style="height:52%"></div>
+                    <div class="bar" style="height:91%"></div>
+                    <div class="bar" style="height:75%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="chart">
+
+                <h3>System Intelligence</h3>
+
+                <p style="
+                    color:#71857d;
+                    font-size:11px;
+                    line-height:1.8;
+                ">
+                    AI monitoring engine active.<br><br>
+
+                    <span class="green">
+                        ● 192 systems nominal
+                    </span>
+                    <br>
+
+                    <span class="orange">
+                        ● 6 require observation
+                    </span>
+                    <br>
+
+                    <span class="red">
+                        ● 3 require attention
+                    </span>
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+</body>
+</html>
